@@ -1,0 +1,18 @@
+(*use Random.self_init before attempting to run*)
+
+(* randomgenerator.caml created by Ben Golden (beng@clemson.edu) for testing SDE2 for CPSC3520 Fall 2018*)
+
+let rec rvec (vlen, bound)=
+  if vlen > 0
+  then 
+    if Random.bool ()
+    then Random.float bound :: rvec(vlen-1,bound)
+    else Random.float (-.bound) :: rvec(vlen-1,bound)
+  else []
+;;
+
+let rec generate (vlen, listlen, bound)=
+  if listlen > 0
+  then rvec (vlen, bound) :: generate (vlen, listlen - 1, bound)
+  else []
+;;

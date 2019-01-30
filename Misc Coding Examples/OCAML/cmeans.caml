@@ -1,0 +1,138 @@
+(* helper function for distanceR2*)
+let square n=
+  n *. n
+;;
+
+(*function 3.1*)
+let rec distanceR2 (v1, v2)=
+  if List.length v1 > 1
+  then square ((List.hd v1) -. (List.hd v2)) +. distanceR2 ((List.tl v1), (List.tl v2))
+  else square ((List.hd v1) -. (List.hd v2))
+;;
+
+(*function 3.2*)
+let rec distanceSqAllMeans (v, vset)=
+  if List.length vset > 1
+  then distanceR2 (v, List.hd vset) :: distanceSqAllMeans (v, List.tl vset)
+  else distanceR2 (v, List.hd vset) :: []
+;;
+
+(*helper function for listMinPos*)
+let rec listCmp (blist)=
+  if List.length blist > 1
+  then
+    if (List.hd blist) < (listCmp (List.tl blist))
+    then List.hd blist
+    else listCmp (List.tl blist)
+  else List.hd blist
+;;
+
+(*function 3.3*)
+let rec listMinPos (alist)=
+  if List.length alist > 1
+  then
+    if List.hd alist < listCmp (List.tl alist)
+    then 0
+    else listMinPos(List.tl alist) + 1
+  else 0
+;;
+
+(*function 3.4*)
+let rec elsum (l1, l2)=
+  if List.length l1 > 1
+  then (List.hd l1) +. (List.hd l2) :: elsum(List.tl l1, List.tl l2)
+  else (List.hd l1) +. (List.hd l2) :: []
+;;
+
+(*function 3.5*)
+let rec scaleList (l1, scale)=
+  if scale != 0
+  then
+    if List.length l1 > 0
+    then
+      if List.length l1 > 1
+      then (List.hd l1) /. float_of_int scale :: scaleList (List.tl l1, scale)
+      else (List.hd l1) /. float_of_int scale :: []
+    else []
+  else l1
+;;
+
+(*function 3.6*)
+let rec zeroes (size)=
+  if size > 1
+  then 0. :: zeroes(size-1)
+  else 0. :: []
+;;
+
+(*function 3.7*)
+let rec zeroMeansSet (c,d)=
+  if c > 1
+  then zeroes(d) :: zeroMeansSet(c-1,d)
+  else zeroes(d) :: []
+;;
+
+(*function 3.8*)
+let rec zeroVdiff (v1, v2)=
+  if (List.length v1) == (List.length v2)
+  then
+    if List.length v1 > 0
+    then
+      if compare (List.hd v1) (List.hd v2) == 0
+      then zeroVdiff (List.tl v1, List.tl v2)
+      else false      
+    else true
+  else false
+;;
+
+(*function 3.9*)
+let rec zeroSetDiff (s1, s2)=
+  if List.length s1 > 0
+  then
+    if zeroVdiff (List.hd s1, List.hd s2) == true
+    then zeroSetDiff (List.tl s1, List.tl s2)
+    else false
+  else true
+;;
+
+(*function 3.10*)
+let rec zeroCounts (c)=
+  if c > 1
+  then 0 :: zeroCounts(c-1)
+  else 0 :: []
+;;
+
+(*function 3.11*)
+let rec updateCounts (p, counts)=
+  if p == 0
+  then (List.hd counts) + 1 :: List.tl counts
+  else List.hd counts :: updateCounts (p-1, List.tl counts)
+;;
+
+(*function 4.1*)
+let rec updateMeansSum (v, x, means)=
+  if x == 0
+  then elsum(v, List.hd means) :: List.tl means
+  else List.hd means :: updateMeansSum (v, x-1, List.tl means)
+;;
+
+(*function 4.2*)
+let rec formNewMeans (newmeanssum, newcounts)=
+	if List.length newmeanssum > 0
+	then scaleList (List.hd newmeanssum, List.hd newcounts) :: formNewMeans (List.tl newmeanssum, List.tl newcounts)
+	else []
+;;
+
+(*function 4.3*)
+let rec reclassify (h, currmeans, newmeanssum, newcounts)=
+  if List.length h > 0
+  then reclassify((List.tl h), currmeans, updateMeansSum(List.hd h, listMinPos(distanceSqAllMeans((List.hd h), currmeans)), newmeanssum),updateCounts(listMinPos(distanceSqAllMeans((List.hd h), currmeans)), newcounts))
+  else formNewMeans(newmeanssum, newcounts)
+;;
+
+
+(*function 4.4*)
+let rec cmeans(c, h, mucurrent)=
+  if zeroSetDiff (mucurrent, reclassify(h, mucurrent, zeroMeansSet(c,List.length(List.hd h)), zeroCounts(c)))
+  then mucurrent
+  else cmeans(c, h, reclassify(h, mucurrent, zeroMeansSet(c,List.length(List.hd h)), zeroCounts(c)))
+;;

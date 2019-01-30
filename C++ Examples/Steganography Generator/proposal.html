@@ -1,0 +1,37 @@
+<!-- Benjamin Golden -->
+<!-- 10/25/2016 -->
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Final Project Proposal</h1>
+
+<h2>Benjamin Golden<br>11/8/2016</h2>
+
+<p>Steganography is a method of hiding an image or message in the code of a text, image, audio, or any sort of file. For this project, I will be creating a program which hides the data for an image inside of another image. For example, an image like this:</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/a/a8/Steganography_original.png"></img>
+
+<p>might be hiding a picture like this:</p>
+
+<img src=https://upload.wikimedia.org/wikipedia/commons/c/c3/Steganography_recovered.png></img>
+
+<p><font size="-2">Images borrowed from https://en.wikipedia.org/wiki/Steganography</p>
+
+<p><font size="+0">In my program, I plan to have additional features which allow the user to hide images in text and text in images. There will be a total of five features provided by the program:</p>
+
+<p>1. Encode pixel values of an image into a receiving image. This will create a new image similar to the receiving image, but its color values will be altered slightly to contain bits from the encoded image's pixel values.</p>
+<p>2. Extract an encoded image from an image given by the user.</p>
+<p>3. Encode bit values from characters in a text file into a receiving image.</p>
+<p>4. Extract encoded text from an image given by the user.</p>
+<p>5. Encode an image into a text file written by the program.</p>
+
+<p>The last feature will make use of the digraph method (a technique I learned in CPSC 2210) to create a message containing the bit values of the pxiels from the input image which somewhat resembles the English language. The color values from each pixel will be separated 4 bits at a time and used as the suffixes of ASCII characters.</p>
+
+<p>Example of pixel data encoded into text:</p>
+
+<img src="stegexample.png"></img>
+
+</body>
+</html>

@@ -1,0 +1,4 @@
+CPSC 4050-001
+Ben Golden
+3D-model generator which takes an .obj file and computes/displays normals
+I haven't been able to figure out how to make the passthru shaders work with the normal shaders, but the normals are rendering and rotating as expected.

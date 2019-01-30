@@ -1,0 +1,53 @@
+
+	Ben Golden
+	Final Project, CPSC 4040
+	steg.cpp
+_______________
+	Quick Reference:
+
+		n: encode, x: extract, t: text in image, i: image in text
+
+		-Image in Image
+			steg -n [input recieving image] [input image to be encoded] [output steganographed image]
+			steg -x [input steganographed image] [output extracted image]
+
+		-Text in Image
+			steg -nt [input recieving image] [input text to be encoded] [output steganographed image]
+			steg -xt [input steganographed image] [output extracted text]
+
+		-Image in Text
+			steg -ni [input image to be encoded] [output steganographed text]
+			steg -xi [input steganographed text] [output extracted image]
+_______________
+
+	This is a steganography program with three basic uses: Image in Image, Text in Image, and Image in Text.
+
+	Image in Image allows the user to store the data of an image into a larger image using traditional steganography methods, and extract those images. The command to encode an image into an image is as follows:
+
+		steg -n [input recieving image] [input image to be encoded] [output steganographed image]
+
+	The user can later extract the hidden image data from the new image, as follows:
+
+		steg -x [input steganographed image] [output extracted image]
+
+	Image in Image works by slightly altering the two least significant bits in the original image's pixel values. By doing this, the pixel values of the image to be encoded can be split into two-bit pieces, and each of those pieces can be transferred into the least significant bits of the original image's pixel values. The disadvantage of this is that OIIO causes a lot of data loss, and there is static around the extracted image. To store values, the image to be encoded must have less than half the height and width of the image being stored.
+
+	Text in Image allows a user to store simple text data in a given image using the same method. The code to put text into an image is as follows:
+
+		steg -nt [input recieving image] [input text to be encoded] [output steganographed image]
+
+	The user can later extract the hidden text data with the given command:
+
+		steg -xt [input steganographed image] [output extracted text]
+
+	Since a text file is just a string of 8-bit ASCII characters, text can be encoded in an image the same way an image is encoded in an image. OIIO causes some data loss here, but words will still be readable.
+
+	Image in Text is the method that faces the least trouble with OpenGL and OIIO, and allows the user to encode image data in a text file using a slightly different method. The command to encode an image into text is as follows:
+
+		steg -ni [input image to be encoded] [output steganographed text]
+
+	The user can extract the text data with the given command:
+
+		steg -xi [input steganographed text] [output extracted image]
+
+	Image in Text works in a different way than the other two methods. First, it divides the image pixel values into four-bit segments. Each segment is stored in the last four bits of an ascii character in a text file.  These ascii characters are generated using the digraph method, which takes a text file and finds the most common sequences of two characters. The encoding function uses digraphs to generate two-character sequences where the characters contain the divided pixel values in their last four bits. The program also prevents non-printing characters from being inserted into the text file. The image can be extracted with little data loss.

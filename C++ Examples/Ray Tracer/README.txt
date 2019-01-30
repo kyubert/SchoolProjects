@@ -1,0 +1,1 @@
+This program is the final project for Computer Science 2100 at Clemson University in the Fall of 2015. It is a functional ray tracer which generates a range of shapes from given files.

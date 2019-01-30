@@ -1,0 +1,1 @@
+This is an assignment from Computer Science 2120 at Clemson University in Spring of 2016. By compiling all of the cpp files, it creates a generator which reads through Franz Kafka's Metamorphosis to create a dictionary. It will then use this dictionary to unscramble a scrambled sentence which you can give to the program.

@@ -1,0 +1,139 @@
+/*
+Ben Golden
+CPSC 2120
+2/1/2016
+*/
+
+#include <string>
+#include <iostream>
+#include <fstream>
+
+#include "Digraph.h"
+
+//Default constructor for Digraph
+Digraph::Digraph(){
+
+	//For loop to fill the proportions array
+	for(int i = 0; i < 26; i++){
+		for(int j = 0; j < 26; j++){
+
+			//Most proportions default at 0.0;
+			proportions[i][j] = 0.0;
+
+		}
+	}
+
+	//Several select proportions default at 0.1;
+	proportions[0][19] = proportions[19][7] = proportions[7][4] = proportions[8][13] = proportions[4][17] = proportions[0][13] = proportions[17][4] = proportions[13][3] = proportions[14][13] = proportions[13][19] = 0.1;
+
+}
+
+//Constructor to read files
+Digraph::Digraph(std::string filename){
+
+	for(int i = 0; i < 26; i++){
+		for(int j = 0; j < 26; j++){
+
+			//All proportions default at 0.0;
+			proportions[i][j] = 0.0;
+
+		}
+	}
+
+	//a and b store each successive char in the file
+	char a, b;
+
+	//totcount stores total number of digraphs
+	int totcount = 0;
+
+	std::ifstream File(filename);
+
+	if(File.is_open()){
+
+		//b and a are set to first character in the file
+		File.get(b);
+
+		a = b;
+
+		while(File.good()){
+
+			//b is set to next character in file. In each iteration, b will be one character ahead of a
+			File.get(b);
+
+			a = tolower(a);
+			b = tolower(b);
+
+			//Checks if a and b fall under a digraph, then increments appropriate digraph and totcount
+			if(int(a) >= 97 && int(a) < 123 && int(b) >= 97 && int(b) < 123){
+
+				proportions[int(a)-97][int(b)-97] += 1.0;
+				
+				totcount++;
+
+			}
+
+			a = b;
+
+		}
+
+	}
+
+	File.close();
+
+	//Loops through each proportion and divides by the totcount
+	if(totcount > 0){
+
+		for(int i = 0; i < 26; i++){
+			for(int j = 0; j < 26; j++){
+
+				proportions[i][j] = proportions[i][j] / double(totcount);
+
+			}
+		}
+
+	}
+
+}
+
+//Gets proportion score of a pair
+double Digraph::getScore(char letter1, char letter2){
+
+	int index1, index2;
+
+	letter1 = tolower(letter1);
+	letter2 = tolower(letter2);
+
+	//Converts each given char from ascii to decimal, then assigns them to an index 0-25 (a-z in the proportions array)
+	index1 = int(letter1) - 97;
+	index2 = int(letter2) - 97;
+
+	if(index1 < 26 && index1 >= 0 && index2 < 26 && index2 >= 0){
+		return proportions[index1][index2];
+	}
+
+	//Returns the proportion for the given indexes
+	else{
+		return 0.0;
+	}
+}
+
+//Gets total proportion score of a string
+double Digraph::getScore(std::string phrase){
+
+	//Gets length of the string for a for loop
+	int length = int(phrase.length());
+
+	//Declares a counter to get total score
+	double totprop = 0.0;
+
+	//for loop goes through string and adds all of the scores together
+	for(int i = 0; i < length - 1; i++){
+
+		//Uses the previously declared getScore function to get proportions of each pair
+		totprop += getScore(phrase[i], phrase[i + 1]);
+
+	}
+
+	return totprop;
+
+}

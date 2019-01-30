@@ -1,0 +1,30 @@
+/**********************************************************************
+* Author: Ben Golden
+* File: light.h
+* Modified On: 11/24/2015
+* Description: Creates Light class
+***********************************************************************/
+#ifndef LIGHT_H
+#define LIGHT_H
+#include "vector.h"
+#include "rt.h"
+#include "object.h"
+#include "scene.h"
+
+//Prototype for illuminate function
+class Light {
+
+public:
+  Light();
+  Light(Vector);
+  
+  COLOR_T illuminate(RAY_T, SCENE_T, Vector*, Vector*, int);
+  bool test_shadow(SCENE_T, Vector, int);
+  
+
+  Vector src;
+  static COLOR_T color;
+
+};
+
+#endif
